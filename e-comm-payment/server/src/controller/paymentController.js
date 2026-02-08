@@ -3,9 +3,40 @@ import Order from "../models/Order.js";
 import crypto from "crypto";
 
 // CREATE ORDER
+// export const createOrder = async (req, res) => {
+//   try {
+//     const { productId, price } = req.body;
+
+//     const options = {
+//       amount: price * 100,
+//       currency: "INR",
+//       receipt: `rcpt_${Date.now()}`,
+//     };
+
+//     const order = await razorpayInstance.orders.create(options);
+
+//     // Save order as pending
+//     const newOrder = await Order.create({
+//       userId: req.user._id,
+//       productId,
+//       amount: price,
+//       razorpayOrderId: order.id,
+//       status: "pending",
+//     });
+
+//     res.json({
+//       success: true,
+//       order,
+//       orderId: newOrder._id,
+//     });
+//   } catch (error) {
+//     res.status(500).json({ success: false });
+//   }
+// };
+
 export const createOrder = async (req, res) => {
   try {
-    const { productId, price } = req.body;
+    const { items, price } = req.body;
 
     const options = {
       amount: price * 100,
@@ -15,10 +46,10 @@ export const createOrder = async (req, res) => {
 
     const order = await razorpayInstance.orders.create(options);
 
-    // Save order as pending
+    // Save order as pending with ITEMS array
     const newOrder = await Order.create({
       userId: req.user._id,
-      productId,
+      items,                // 👈 store full cart items
       amount: price,
       razorpayOrderId: order.id,
       status: "pending",
@@ -30,9 +61,11 @@ export const createOrder = async (req, res) => {
       orderId: newOrder._id,
     });
   } catch (error) {
-    res.status(500).json({ success: false });
+    console.log("Create Order Error:", error);
+    res.status(500).json({ success: false, message: error.message });
   }
 };
+
 
 
 // import crypto from "crypto";

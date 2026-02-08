@@ -3,24 +3,19 @@ import { Navigate } from "react-router-dom";
 import { myContext } from "../context/AuthContext";
 
 const ProtectedRoute = ({ children, roles }) => {
-  const { user } = useContext(myContext);
-  const {  loading } = useContext(myContext);
+  const { user, loading } = useContext(myContext);
 
-if (loading) {
-  return <h3>Loading...</h3>;
-}
+  console.log(user.role)
+  if (loading) {
+    return <h3>Loading...</h3>;
+  }
 
-if (!user) {
-  return <Navigate to="/login" />;
-}
-
-
-  // Not logged in
-  if (!user) {
+  // Agar user object hi nahi
+  if (!user || !user.role) {
     return <Navigate to="/login" />;
   }
 
-  // Role check
+  // Role check sirf tab jab roles pass kiya gaya ho
   if (roles && roles.length > 0) {
     const userRole = user.role;
 

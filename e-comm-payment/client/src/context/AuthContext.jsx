@@ -13,8 +13,10 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState("");
   const navigate = useNavigate();
 
-  const login = async (formData) => {
+const login = async (formData) => {
+  try {
     const { email, password } = formData;
+
     const res = await axios.post(
       `${BaseUrl}/auth/login`,
       { email, password },
@@ -25,10 +27,29 @@ export const AuthProvider = ({ children }) => {
         withCredentials: true,
       }
     );
+
     console.log(res.data.message);
-    await fetchUser(); // login ke baad user fetch karo
+
+    // 👇 LOGIN RESPONSE ME JO USER AATA HAI USE DIRECT SET KARO
+    console.log(res.data.user)
+    if (res.data.user) {
+      setUser(res.data.user);
+
+      // ROLE BASED REDIRECTION
+      if (res.data.user.role === "admin") {
+        navigate("/admin");
+      } else {
+        navigate("/dashboard");
+      }
+    }
+
     return res.data;
-  };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
 
   const signup = async (formData) => {
     const { name, email, password } = formData;

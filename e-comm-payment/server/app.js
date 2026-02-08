@@ -7,6 +7,7 @@ import productRoutes from "./src/routes/prodRoutes.js";
 // import paymentRoutes from "./src/routes/paymentRoutes.js";
 import orderRoutes from "./src/routes/orderRoutes.js";
 import routers from "./src/routes/paymentRoutes.js";
+import bookRoutes from "./src/routes/bookRoutes.js";
 
 const app = express();
 
@@ -34,6 +35,7 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.send("hello");
 });
+app.use("/books", bookRoutes);
 
 app.use("/auth", userRoutes);
 app.use("/product", productRoutes);

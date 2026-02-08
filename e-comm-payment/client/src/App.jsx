@@ -8,6 +8,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./components/Dashboard";
 import Product from "./pages/Product";
 import PublicRoute from "./components/PublicRoute";
+import MyOrders from "./pages/MyOrders";
 
 const App = () => {
   return (
@@ -47,6 +48,14 @@ const App = () => {
           element={
             <ProtectedRoute>
               <Product />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/myorders"
+          element={
+            <ProtectedRoute roles={["user"]}>
+              <MyOrders />
             </ProtectedRoute>
           }
         />

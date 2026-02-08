@@ -18,6 +18,8 @@ const Dashboard = () => {
       Dashboard
       welcome {user.name}
       <Link to="/products">Go to Product page</Link>
+      <Link to="/myorders">Go to my order</Link>
+
     </div>
   )
 }

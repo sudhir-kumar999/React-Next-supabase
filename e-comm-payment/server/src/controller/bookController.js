@@ -97,10 +97,37 @@ export const addBook = async (req, res) => {
 export const deleteBook = async (req, res) => {
   try {
     await Book.findByIdAndDelete(req.params.id);
-
     res.json({
       success: true,
       message: "Book Deleted",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const updateBook = async (req, res) => {
+  try {
+    const { title, author, price, category, shortDescription, longDescription, image, stock } = req.body;
+    const update = {};
+    if (title != null) update.title = title;
+    if (author != null) update.author = author;
+    if (price != null) update.price = Number(price);
+    if (category != null) update.category = category;
+    if (shortDescription != null) update.shortDescription = shortDescription;
+    if (longDescription != null) update.longDescription = longDescription;
+    if (image != null) update.image = image;
+    if (stock != null) update.stock = Number(stock);
+
+    const book = await Book.findByIdAndUpdate(req.params.id, update, { new: true });
+    if (!book) return res.status(404).json({ success: false, message: "Book not found" });
+    res.json({
+      success: true,
+      message: "Book Updated",
+      book,
     });
   } catch (error) {
     res.status(500).json({

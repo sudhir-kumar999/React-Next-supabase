@@ -3,6 +3,7 @@ import {
   getAllBooks,
   getBookById,
   addBook,
+  updateBook,
   getCategories,
   getSampleBooks,
   deleteBook,
@@ -24,6 +25,7 @@ router.get("/:id", getBookById);
 
 router.post("/", addBook);
 router.post("/add", protect, adminAuth, addBook);
+router.put("/:id", protect, adminAuth, updateBook);
 router.delete("/:id", protect, adminAuth, deleteBook);
 
 

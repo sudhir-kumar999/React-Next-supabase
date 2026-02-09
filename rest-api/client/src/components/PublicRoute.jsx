@@ -10,7 +10,7 @@ export const PublicRoute = () => {
     if (user.role === "admin") {
       return <Navigate to="/admin" replace />;
     }
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/" replace />;
   }
 
   // ❌ user ko forcefully dashboard mat bhejo

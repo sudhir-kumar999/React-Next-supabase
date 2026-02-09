@@ -1,6 +1,7 @@
 import React from "react";
 import Navbar from "./components/Navbar";
-import { Route, Routes } from "react-router-dom";
+import AdminNavbar from "./components/AdminNavbar";
+import { Route, Routes, useLocation } from "react-router-dom";
 
 import Home from "./components/Home";
 import Login from "./pages/Login";
@@ -16,16 +17,22 @@ import MyOrders from "./pages/MyOrders";
 import Books from "./components/Books";
 import BookDetail from "./components/BookDetail";
 
-import Cart from "./pages/Cart"; // 👈 Cart Import
+import Cart from "./pages/Cart";
 
 import Footer from "./components/Footer";
 import AddBook from "./pages/AddBook";
 import AdminDashboard from "./pages/AdminDashboard";
+import AdminOrders from "./pages/AdminOrders";
+import AdminEditBook from "./pages/AdminEditBook";
+import Unauthorized from "./pages/Unauthorized";
 
 const App = () => {
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith("/admin");
+
   return (
     <div>
-      <Navbar />
+      {isAdminRoute ? <AdminNavbar /> : <Navbar />}
 
       <Routes>
         {/* Public Routes */}
@@ -53,11 +60,13 @@ const App = () => {
         <Route path="/books" element={<Books />} />
         <Route path="/books/:id" element={<BookDetail />} />
 
+        <Route path="/unauthorized" element={<Unauthorized />} />
+
         {/* Protected Routes */}
         <Route
           path="/dashboard"
           element={
-            <ProtectedRoute roles={["user"]}>
+            <ProtectedRoute roles={["user", "admin"]}>
               <Dashboard />
             </ProtectedRoute>
           }
@@ -105,6 +114,24 @@ const App = () => {
           element={
             <ProtectedRoute roles={["admin"]}>
               <AddBook />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/orders"
+          element={
+            <ProtectedRoute roles={["admin"]}>
+              <AdminOrders />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/edit-book/:id"
+          element={
+            <ProtectedRoute roles={["admin"]}>
+              <AdminEditBook />
             </ProtectedRoute>
           }
         />

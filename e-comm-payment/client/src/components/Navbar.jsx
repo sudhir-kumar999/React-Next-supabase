@@ -77,7 +77,15 @@ const Navbar = () => {
           <h1 className="text-lg font-bold">📚 BookStore</h1>
         </Link>
 
-        <h1>Hello</h1>
+        {!user ? (
+          <Link to="/login">
+            <Button>Login</Button>
+          </Link>
+        ) : (
+          <Button variant="destructive" onClick={handleLogout}>
+            Logout
+          </Button>
+        )}
       </nav>
 
       {/* Mobile Bottom Navigation */}

@@ -7,7 +7,7 @@ const router =express.Router()
 
 router.post("/register",register)
 router.post("/login",login)
-router.post("/logout",logout)
+router.post("/logout",protect,logout)
 router.get("/fetch", protect, authorize("user", "admin"), getMe)
 
 export default router

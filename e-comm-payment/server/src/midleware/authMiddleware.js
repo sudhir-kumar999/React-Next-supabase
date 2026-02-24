@@ -3,6 +3,7 @@ import { verifyToken } from "../utils/token.js"
 
 
 export const protect=async(req,res,next)=>{
+    console.log("cookies =>", req.cookies);
     const token=req.cookies.access
     if(!token){
         return res.json({

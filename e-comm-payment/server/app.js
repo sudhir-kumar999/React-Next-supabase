@@ -38,9 +38,10 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.send("hello");
 });
+app.use("/auth", userRoutes);
+
 app.use("/books", bookRoutes);
 
-app.use("/auth", userRoutes);
 app.use("/product", productRoutes);
 
 // normal payment routes (create, verify etc)

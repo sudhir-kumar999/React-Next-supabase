@@ -98,6 +98,7 @@ const login = async (formData) => {
       //   return res.data.data;
     } catch (error) {
       // 🔥 MOST IMPORTANT PART
+      console.log(error)
       setUser("");
     } finally {
     setLoading(false);

@@ -56,12 +56,15 @@ export const login = async (req, res) => {
   const token = generateToken(user._id, SECRET);
   // console.log(token)
   res.cookie("access", token, {
-    httpOnly: true,
-    secure: false, // localhost ke liye
-    sameSite: "lax",
-    maxAge: 24 * 60 * 60 * 1000,
-    path: "/",
-  });
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production", // ⭐ IMPORTANT
+  sameSite:
+    process.env.NODE_ENV === "production"
+      ? "none"
+      : "lax",
+  maxAge: 24 * 60 * 60 * 1000,
+  path: "/",
+});
   res.json({
     success: true,
     message: "login successfully",
@@ -71,11 +74,14 @@ export const login = async (req, res) => {
 
 export const logout = async (req, res) => {
   res.clearCookie("access", {
-    httpOnly: true,
-    secure: false,
-    sameSite: "lax",
-    path: "/",
-  });
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite:
+    process.env.NODE_ENV === "production"
+      ? "none"
+      : "lax",
+  path: "/",
+});
 
   return res.status(200).json({
     success: true,

@@ -6,7 +6,8 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Alert, AlertTitle } from "@/components/ui/alert";
+
+import { toast } from "react-toastify";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -17,23 +18,35 @@ const Login = () => {
     password: "",
   });
 
-  const [error, setError] = useState("");
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const res = await login(formData);
+    // ✅ validation
+    if (!formData.email || !formData.password) {
+      toast.error("All fields are required");
+      return;
+    }
 
-    if (res.success === true) {
-      navigate("/dashboard");
-    } else {
-      setError(res.message || "Invalid credentials");
+    try {
+      const res = await login(formData);
+
+      if (res?.success) {
+        toast.success("Login Successful ✅");
+
+        // little delay so user sees toast
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 1500);
+      } else {
+        toast.error(res?.message || "Invalid credentials ❌");
+      }
+    } catch (error) {
+      toast.error("Something went wrong");
     }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex justify-center items-center px-4">
-
       <Card className="w-full max-w-md shadow-xl">
         <CardHeader>
           <CardTitle className="text-center text-2xl">
@@ -42,14 +55,7 @@ const Login = () => {
         </CardHeader>
 
         <CardContent>
-          {error && (
-            <Alert className="mb-4 text-red-600 border-red-400">
-              <AlertTitle>{error}</AlertTitle>
-            </Alert>
-          )}
-
           <form onSubmit={handleSubmit} className="space-y-4">
-
             <div>
               <Label>Email Address</Label>
               <Input
@@ -59,7 +65,6 @@ const Login = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, email: e.target.value })
                 }
-                required
               />
             </div>
 
@@ -72,7 +77,6 @@ const Login = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, password: e.target.value })
                 }
-                required
               />
             </div>
 
@@ -87,10 +91,8 @@ const Login = () => {
               Sign Up
             </Link>
           </div>
-
         </CardContent>
       </Card>
-
     </div>
   );
 };
